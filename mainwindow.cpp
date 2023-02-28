@@ -1,21 +1,31 @@
+#include <QApplication>
 #include <QPainter>
 #include <QTime>
 #include <QTimer>
 
 #include "mainwindow.h"
 
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
+MainWindow::MainWindow(QWidget *parent) :
+    QMainWindow(parent),
+    mStart(nullptr)
 {
     QTimer *timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, QOverload<>::of(&MainWindow::update));
     timer->start(1000);
+
+    mStart = new QPushButton("Start", this);
+    mStart->setGeometry(10, 10, 80, 30);
+
+    connect(mStart, SIGNAL(clicked()), this, SLOT(handleStart()));
+
     setWindowTitle(tr("Analog Clock"));
     resize(200, 200);
 }
 
 MainWindow::~MainWindow()
 {
+    delete mStart;
+    mStart = nullptr;
 }
 
 void MainWindow::paintEvent(QPaintEvent *)
@@ -87,4 +97,9 @@ void MainWindow::paintEvent(QPaintEvent *)
     painter.rotate(6.0 * time.second());
     painter.drawConvexPolygon(secondHand, 3);
     painter.restore();
+}
+
+void MainWindow::handleStart()
+{
+    qDebug("Hello World\n");
 }

@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QPushButton>
 
 class MainWindow :
         public QMainWindow
@@ -15,5 +16,11 @@ public:
 protected:
     void paintEvent(QPaintEvent *) override;
 
+
+private:
+    QPushButton *mStart;
+
+public slots:
+    void handleStart();
 };
 #endif // MAINWINDOW_H
