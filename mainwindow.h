@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include <QPushButton>
 
+#include "digitalclock.h"
+
 class MainWindow :
         public QMainWindow
 {
@@ -13,14 +15,8 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-protected:
-    void paintEvent(QPaintEvent *) override;
-
-
 private:
-    QPushButton *mStart;
+    DigitalClock mDigitalClock;
 
-public slots:
-    void handleStart();
 };
 #endif // MAINWINDOW_H

@@ -10,6 +10,7 @@ DigitalClock::DigitalClock(QWidget *parent)
     : QLCDNumber(parent)
 {
     setSegmentStyle(Filled);
+    setDigitCount(8);
 
     QTimer *timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &DigitalClock::showTime);
@@ -25,8 +26,8 @@ void DigitalClock::showTime()
 {
     QTime time = QTime::currentTime();
     QString text = time.toString("hh:mm:ss");
-    if((time.second() % 2) == 0) {
-        text[2] = ' ';
-    }
+    // if((time.second() % 2) == 0) {
+    //     text[2] = ' ';
+    // }
     display(text);
 }
