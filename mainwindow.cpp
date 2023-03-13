@@ -3,20 +3,30 @@
 #include <QTime>
 #include <QTimer>
 #include <QHBoxLayout>
+#include <QGridLayout>
 
 #include "mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent)
+    QMainWindow(),
+    mCentralWidget(),
+    mCentralWidgetLayout(&mCentralWidget),
+    mStartButton("Start"),
+    mDigitalClock()
 {
-    // Set layout
-    layout()->addWidget(&mDigitalClock);
+    connect(&mStartButton, SIGNAL(clicked()), this, SLOT(onStart()));
 
-
+    mCentralWidgetLayout.addWidget(&mStartButton);
+    mCentralWidgetLayout.addWidget(&mDigitalClock);
+    setCentralWidget(&mCentralWidget);
     setWindowTitle(tr("CodeApplication"));
-    resize(200, 200);
 }
 
 MainWindow::~MainWindow()
 {
+}
+
+void MainWindow::onStart()
+{
+    qDebug("Start Button Pressed");
 }

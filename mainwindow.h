@@ -15,7 +15,13 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+public slots:
+    void onStart();
+
 private:
+    QWidget mCentralWidget;
+    QGridLayout mCentralWidgetLayout;
+    QPushButton mStartButton;
     DigitalClock mDigitalClock;
 
 };

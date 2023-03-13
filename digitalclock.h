@@ -3,6 +3,10 @@
 
 #include <QLCDNumber>
 #include <QObject>
+#include <QHBoxLayout>
+#include <QElapsedTimer>
+#include <QTimer>
+
 
 class DigitalClock :
         public QLCDNumber
@@ -12,6 +16,8 @@ public:
 
 private slots:
     void showTime();
+    QTimer mTimer;
+    QElapsedTimer mElapsedTime;
 };
 
 

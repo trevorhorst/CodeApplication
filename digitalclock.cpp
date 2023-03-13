@@ -4,30 +4,31 @@
 #include "digitalclock.h"
 
 #include <QTime>
-#include <QTimer>
-
 DigitalClock::DigitalClock(QWidget *parent)
     : QLCDNumber(parent)
+    , mTimer(this)
 {
     setSegmentStyle(Filled);
-    setDigitCount(8);
+    setDigitCount(9);
 
-    QTimer *timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, this, &DigitalClock::showTime);
-    timer->start(1000);
+    connect(&mTimer, &QTimer::timeout, this, &DigitalClock::showTime);
+    mElapsedTime.start();
+    mTimer.start(50);
+
+    // connect(&mElapsedTime, &QTimer::timeout, this, &DigitalClock::showTime());
+    // mElapsedTime.start(50);
 
     showTime();
 
     setWindowTitle(tr("Digital Clock"));
-    resize(150, 60);
+    resize(300, 100);
 }
 
 void DigitalClock::showTime()
 {
+    // QTime time(0, 0, 0, mElapsedTime.elapsed());
     QTime time = QTime::currentTime();
-    QString text = time.toString("hh:mm:ss");
-    // if((time.second() % 2) == 0) {
-    //     text[2] = ' ';
-    // }
+    QString text = time.toString("mm:ss.z");
+    text.chop(2);
     display(text);
 }
