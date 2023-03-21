@@ -6,6 +6,7 @@
 #include <QHBoxLayout>
 #include <QElapsedTimer>
 #include <QTimer>
+#include <QDateTime>
 
 
 class DigitalClock :

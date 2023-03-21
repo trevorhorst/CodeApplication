@@ -26,8 +26,12 @@ DigitalClock::DigitalClock(QWidget *parent)
 
 void DigitalClock::showTime()
 {
-    // QTime time(0, 0, 0, mElapsedTime.elapsed());
-    QTime time = QTime::currentTime();
+    int64_t elapsed = mElapsedTime.elapsed();
+    int ms = elapsed % 1000;
+    int s = (elapsed / 1000) % 60;
+    int m = (elapsed / 1000) / 60;
+    QTime time(0, m, s, ms);
+    // QTime time = QTime::currentTime();
     QString text = time.toString("mm:ss.z");
     text.chop(2);
     display(text);
