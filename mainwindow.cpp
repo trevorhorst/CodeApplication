@@ -40,14 +40,16 @@ MainWindow::MainWindow(QWidget *parent) :
     mLCDTimer.setSegmentStyle(QLCDNumber::Filled);
 
     mActivityLog.setReadOnly(true);
-    mActivityWidgetLayout.addWidget(&mLCDTimer, 0, 0);
-    mActivityWidgetLayout.addWidget(&mActivityLog, 1, 0);
+    mActivityWidgetLayout.addWidget(&mActivityLog, 0, 0);
     mActivityWidgetLayout.addLayout(&mHTGrid, 0, 1);
     // mActivityWidgetLayout.addWidget(&mActivityLog, 0, 1);
     // mActivityWidgetLayout.addWidget(&mHTBox, 1, 10);
 
     mCentralWidgetLayout.addWidget(&mStartButton, 0, 0);
-    mCentralWidgetLayout.addLayout(&mActivityWidgetLayout, 1, 0);
+    mCentralWidgetLayout.addWidget(&mLCDTimer, 1, 0);
+    mCentralWidgetLayout.addLayout(&mActivityWidgetLayout, 2, 0);
+    mCentralWidgetLayout.setRowStretch(1, 1);
+    mCentralWidgetLayout.setRowStretch(2, 4);
     // End configure central widget layout
 
     connect(&mHeartbeat, &QTimer::timeout, this, &MainWindow::heartbeat);
