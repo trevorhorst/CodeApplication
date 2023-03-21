@@ -13,7 +13,7 @@ DigitalClock::DigitalClock(QWidget *parent)
 
     connect(&mTimer, &QTimer::timeout, this, &DigitalClock::showTime);
     mElapsedTime.start();
-    mTimer.start(50);
+    mTimer.start(75);
 
     // connect(&mElapsedTime, &QTimer::timeout, this, &DigitalClock::showTime());
     // mElapsedTime.start(50);

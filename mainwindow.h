@@ -5,13 +5,18 @@
 #include <QPushButton>
 #include <QCheckBox>
 #include <QPlainTextEdit>
+#include <QLCDNumber>
+#include <QElapsedTimer>
 
 #include "digitalclock.h"
+
 
 class MainWindow :
         public QMainWindow
 {
     Q_OBJECT
+
+    static const int32_t lcd_display_digits;
 
 public:
     MainWindow(QWidget *parent = nullptr);
@@ -22,11 +27,14 @@ public slots:
     void onHTCheck();
     void logActivity(const QString &activity);
 
+    void heartbeat();
+
 private:
     QWidget mCentralWidget;
     QGridLayout mCentralWidgetLayout;
 
     QPushButton mStartButton;
+    QLCDNumber mLCDTimer;
 
     // Activity Grid
     QGridLayout mActivityWidgetLayout;
@@ -43,6 +51,7 @@ private:
     QCheckBox mTamponadeBox;
     QCheckBox mToxinsBox;
 
-
+    QTimer mHeartbeat;
+    QElapsedTimer mElapsedTime;
 };
 #endif // MAINWINDOW_H

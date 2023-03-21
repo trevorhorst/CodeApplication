@@ -7,11 +7,14 @@
 
 #include "mainwindow.h"
 
+const int32_t MainWindow::lcd_display_digits = 7;
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(),
     mCentralWidget(),
     mCentralWidgetLayout(&mCentralWidget),
     mStartButton("Start"),
+    mLCDTimer(lcd_display_digits),
     mActivityWidgetLayout(),
     mDigitalClock(),
     mActivityLog(),
@@ -22,7 +25,8 @@ MainWindow::MainWindow(QWidget *parent) :
     mHypothermiaBox("Hypothermia"),
     mTensionBox("Tension"),
     mTamponadeBox("Tamponade"),
-    mToxinsBox("Toxins")
+    mToxinsBox("Toxins"),
+    mHeartbeat(this)
 {
     // Configure central widget layout
     mHTGrid.addWidget(&mHypovolemiaBox, 1, 0);
@@ -33,7 +37,10 @@ MainWindow::MainWindow(QWidget *parent) :
     mHTGrid.addWidget(&mTamponadeBox, 6, 0);
     mHTGrid.addWidget(&mToxinsBox, 7, 0);
 
-    mActivityWidgetLayout.addWidget(&mDigitalClock, 0, 0);
+    mLCDTimer.setSegmentStyle(QLCDNumber::Filled);
+
+    mActivityLog.setReadOnly(true);
+    mActivityWidgetLayout.addWidget(&mLCDTimer, 0, 0);
     mActivityWidgetLayout.addWidget(&mActivityLog, 1, 0);
     mActivityWidgetLayout.addLayout(&mHTGrid, 0, 1);
     // mActivityWidgetLayout.addWidget(&mActivityLog, 0, 1);
@@ -43,6 +50,7 @@ MainWindow::MainWindow(QWidget *parent) :
     mCentralWidgetLayout.addLayout(&mActivityWidgetLayout, 1, 0);
     // End configure central widget layout
 
+    connect(&mHeartbeat, &QTimer::timeout, this, &MainWindow::heartbeat);
     connect(&mStartButton, SIGNAL(clicked()), this, SLOT(onStart()));
     connect(&mHypovolemiaBox, SIGNAL(clicked()), this, SLOT(onHTCheck()));
     connect(&mHydrogenIonBox, SIGNAL(clicked()), this, SLOT(onHTCheck()));
@@ -55,16 +63,38 @@ MainWindow::MainWindow(QWidget *parent) :
     // mCentralWidgetLayout.addWidget(&mDigitalClock);
     setCentralWidget(&mCentralWidget);
     setWindowTitle(tr("CodeApplication"));
+
+    QString text = QString("00:00.0");
+    mLCDTimer.display(text);
+
+    mHeartbeat.start(50);
 }
 
 MainWindow::~MainWindow()
 {
 }
 
+void MainWindow::heartbeat()
+{
+    if(mElapsedTime.isValid()) {
+        int64_t elapsed = mElapsedTime.elapsed();
+        int ms = elapsed % 1000;
+        int s = (elapsed / 1000) % 60;
+        int m = (elapsed / 1000) / 60;
+        QTime time(0, m, s, ms);
+        // QTime time = QTime::currentTime();
+        QString text = time.toString("mm:ss.zzz");
+        text.chop(2);
+        mLCDTimer.display(text);
+    } else {
+        // Do we need to do something in here?
+    }
+}
+
 void MainWindow::onStart()
 {
-    mActivityLog.appendPlainText("Start Button Pressed");
-    qDebug("Start Button Pressed");
+    mElapsedTime.start();
+    logActivity("Code started");
 }
 
 void MainWindow::logActivity(const QString &activity)
